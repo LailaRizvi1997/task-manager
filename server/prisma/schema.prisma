@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                String          @id @default(cuid())
+  email             String          @unique
+  passwordHash      String
+  name              String?
+  avatarUrl         String?
+  
+  // Settings
+  timezone          String          @default("UTC")
+  eodReminderTime   String?         // "16:00" format
+  weekendEOD        Boolean         @default(true)
+  
+  // Relations
+  categories        Category[]
+  tasks             Task[]
+  sessions          Session[]
+  notifications     Notification[]
+  
+  // Timestamps
+  emailVerified     DateTime?
+  lastLoginAt       DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  
+  @@index([email])
+}
+
+model Session {
+  id                String          @id @default(cuid())
+  token             String          @unique
+  refreshToken      String          @unique
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  expiresAt         DateTime
+  refreshExpiresAt  DateTime
+  createdAt         DateTime        @default(now())
+  
+  @@index([token])
+  @@index([refreshToken])
+  @@index([userId])
+}
+
+model Category {
+  id                String          @id @default(cuid())
+  name              String
+  description       String?
+  position          Int
+  color             String          @default("#6b7280")
+  icon              String?
+  
+  // Relations
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks             Task[]
+  
+  // Settings
+  isArchived        Boolean         @default(false)
+  
+  // Timestamps
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  
+  @@unique([userId, position])
+  @@index([userId, isArchived])
+}
+
+model Task {
+  id                String          @id @default(cuid())
+  title             String
+  description       String?
+  
+  // Priority and Visual
+  priority          Int             @default(0)
+  color             String          @default("#ffffff")
+  
+  // EOD Feature
+  isEOD             Boolean         @default(false)
+  eodSetAt          DateTime?
+  eodCompletedAt    DateTime?
+  
+  // Status
+  completed         Boolean         @default(false)
+  completedAt       DateTime?
+  
+  // Relations
+  categoryId        String
+  category          Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subtasks          Subtask[]
+  attachments       Attachment[]
+  
+  // Additional Fields
+  dueDate           DateTime?
+  reminder          DateTime?
+  notes             String?
+  
+  // Timestamps
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  
+  @@index([userId, completed])
+  @@index([categoryId, priority])
+  @@index([userId, isEOD])
+  @@index([userId, completedAt])
+}
+
+model Subtask {
+  id                String          @id @default(cuid())
+  title             String
+  completed         Boolean         @default(false)
+  position          Int
+  
+  taskId            String
+  task              Task            @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  
+  @@unique([taskId, position])
+}
+
+model Attachment {
+  id                String          @id @default(cuid())
+  fileName          String
+  fileUrl           String
+  fileSize          Int
+  mimeType          String
+  
+  taskId            String
+  task              Task            @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  
+  uploadedAt        DateTime        @default(now())
+  
+  @@index([taskId])
+}
+
+model Notification {
+  id                String          @id @default(cuid())
+  type              NotificationType
+  title             String
+  message           String
+  data              Json?
+  read              Boolean         @default(false)
+  
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime        @default(now())
+  
+  @@index([userId, read])
+}
+
+enum NotificationType {
+  EOD_REMINDER
+  TASK_DUE
+  DAILY_SUMMARY
+  ACHIEVEMENT
+}
