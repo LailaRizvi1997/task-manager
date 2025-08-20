@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import { deploySetup } from './scripts/deploy-setup.js';
 
 // Import routes
 import authRoutes from './routes/auth.js';
@@ -100,11 +101,20 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`🚀 Task Manager API running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
   console.log(`🌐 API docs: http://localhost:${PORT}/`);
+  
+  // Setup database on production start
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      await deploySetup();
+    } catch (error) {
+      console.error('Failed to setup production database:', error);
+    }
+  }
 });
 
 // Graceful shutdown
