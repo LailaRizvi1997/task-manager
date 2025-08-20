@@ -1,6 +1,7 @@
 {
-  "buildCommand": "cd client && npm ci && npm run build",
+  "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
+  "installCommand": "echo 'Skip root install'",
   "framework": null,
   "rewrites": [
     {
