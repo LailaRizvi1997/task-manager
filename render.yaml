@@ -4,9 +4,10 @@ services:
   - type: web
     name: task-manager-api
     runtime: node
-    repo: https://github.com/YOUR_USERNAME/task-manager # Update with your repo
-    buildCommand: cd server && npm install && npm run build
-    startCommand: cd server && npm start
+    repo: https://github.com/LailaRizvi1997/task-manager
+    rootDirectory: server
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
