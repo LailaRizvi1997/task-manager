@@ -3,7 +3,7 @@ import { X, Calendar, Palette, Clock, CheckCircle2, Flame, Trash2 } from 'lucide
 import { format } from 'date-fns';
 import { cn } from '../utils/cn';
 import { useTaskStore } from '../store/taskStore';
-import { Task, UpdateTaskRequest } from '../types';
+import type { UpdateTaskRequest } from '../types';
 
 interface TaskModalProps {
   taskId: string;

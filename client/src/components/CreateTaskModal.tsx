@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Calendar, Palette, AlertCircle } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useTaskStore } from '../store/taskStore';
-import { CreateTaskRequest } from '../types';
+import type { CreateTaskRequest } from '../types';
 
 interface CreateTaskModalProps {
   categoryId: string;

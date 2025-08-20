@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Palette, Hash } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useTaskStore } from '../store/taskStore';
-import { CreateCategoryRequest } from '../types';
+import type { CreateCategoryRequest } from '../types';
 
 interface CreateCategoryModalProps {
   onClose: () => void;

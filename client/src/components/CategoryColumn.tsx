@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import { Plus, MoreVertical, Edit2, Trash2 } from 'lucide-react';
 import { cn } from '../utils/cn';
-import { Category } from '../types';
+import type { Category } from '../types';
 import { useTaskStore } from '../store/taskStore';
 import { TaskCard } from './TaskCard';
 import { TaskModal } from './TaskModal';
@@ -127,7 +127,7 @@ export const CategoryColumn: React.FC<CategoryColumnProps> = ({
 
       {/* Tasks */}
       <Droppable droppableId={category.id} type="task">
-        {(provided, snapshot) => (
+        {(provided: any, snapshot: any) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import api from '../utils/api';
-import { Task, Category, CreateTaskRequest, UpdateTaskRequest, CreateCategoryRequest } from '../types';
+import type { Task, Category, CreateTaskRequest, UpdateTaskRequest, CreateCategoryRequest } from '../types';
 import { toast } from 'react-hot-toast';
 
 interface TaskState {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Flame, Clock, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Flame, Clock, AlertTriangle } from 'lucide-react';
 import { format, differenceInHours, isToday } from 'date-fns';
 import { cn } from '../utils/cn';
-import { Task } from '../types';
+import type { Task } from '../types';
 
 interface EODSummaryProps {
   tasks: Task[];

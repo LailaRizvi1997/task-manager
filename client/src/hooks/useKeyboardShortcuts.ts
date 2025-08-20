@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTaskStore } from '../store/taskStore';
-import { Task } from '../types';
+import type { Task } from '../types';
 
 interface UseKeyboardShortcutsProps {
   selectedTask?: Task | null;

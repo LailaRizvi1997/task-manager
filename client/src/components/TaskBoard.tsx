@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
-import { Plus, Filter, Search, Flame } from 'lucide-react';
+import { DragDropContext, type DropResult } from '@hello-pangea/dnd';
+import { Plus, Search, Flame } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useTaskStore } from '../store/taskStore';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
@@ -30,7 +30,7 @@ export const TaskBoard: React.FC = () => {
   // Keyboard shortcuts
   useKeyboardShortcuts({
     selectedTask,
-    onTaskSelect: setSelectedTaskId
+    onTaskSelect: (task) => setSelectedTaskId(task?.id || null)
   });
 
   // Fetch data on mount
@@ -214,8 +214,8 @@ export const TaskBoard: React.FC = () => {
                   <CategoryColumn
                     key={category.id}
                     category={category}
-                    selectedTaskId={selectedTaskId}
-                    onTaskSelect={setSelectedTaskId}
+                    selectedTaskId={selectedTaskId || undefined}
+                    onTaskSelect={(taskId) => setSelectedTaskId(taskId)}
                   />
                 ))}
                 

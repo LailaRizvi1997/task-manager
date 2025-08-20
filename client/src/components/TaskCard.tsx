@@ -2,7 +2,7 @@ import React from 'react';
 import { Clock, CheckCircle2, Circle, Calendar, Flame } from 'lucide-react';
 import { format, isToday, isPast } from 'date-fns';
 import { cn } from '../utils/cn';
-import { Task } from '../types';
+import type { Task } from '../types';
 import { useTaskStore } from '../store/taskStore';
 
 interface TaskCardProps {
